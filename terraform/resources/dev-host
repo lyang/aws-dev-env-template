@@ -1,0 +1,2 @@
+[dev]
+${host} ansible_connection=ssh ansible_user=admin

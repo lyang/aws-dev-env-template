@@ -1,0 +1,2 @@
+[dev]
+ec2-54-200-250-27.us-west-2.compute.amazonaws.com ansible_connection=ssh ansible_user=admin

@@ -23,3 +23,8 @@ resource "aws_instance" "dev" {
     Name = "dev"
   }
 }
+
+resource "local_file" "dev-host" {
+  content  = "${data.template_file.dev-host.rendered}"
+  filename = "${path.module}/../dev-host"
+}

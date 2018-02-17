@@ -22,3 +22,11 @@ data "aws_ami" "debian" {
     values = ["debian-stretch-hvm-x86_64-*"]
   }
 }
+
+data "template_file" "dev-host" {
+  template = "${file("${path.module}/resources/dev-host")}"
+
+  vars = {
+    host = "${aws_instance.dev.public_dns}"
+  }
+}
