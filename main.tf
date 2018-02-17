@@ -13,41 +13,6 @@ terraform {
   }
 }
 
-resource "aws_key_pair" "dev" {
-  key_name   = "lyang-imac"
-  public_key = "${file("${path.module}/resources/id_rsa.pub")}"
-}
-
-resource "aws_security_group" "ssh" {
-  name = "ssh"
-
-  ingress {
-    from_port   = "22"
-    to_port     = "22"
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags {
-    Name = "ssh"
-  }
-}
-
-resource "aws_security_group" "internet" {
-  name = "internet"
-
-  egress {
-    from_port   = "0"
-    to_port     = "0"
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags {
-    Name = "internet"
-  }
-}
-
 resource "aws_instance" "dev" {
   ami                    = "${data.aws_ami.debian.id}"
   instance_type          = "t2.micro"
