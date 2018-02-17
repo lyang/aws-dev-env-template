@@ -1,6 +1,6 @@
-data "aws_ami" "ubuntu" {
+data "aws_ami" "debian" {
   most_recent = true
-  owners      = ["099720109477"]
+  owners      = ["379101102735"]
 
   filter {
     name   = "architecture"
@@ -19,6 +19,6 @@ data "aws_ami" "ubuntu" {
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-2018*"]
+    values = ["debian-stretch-hvm-x86_64-*"]
   }
 }
