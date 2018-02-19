@@ -1,0 +1,10 @@
+---
+- name: Install base packages
+  become: yes
+  apt: name={{ item }} update_cache=yes state=latest
+  with_items:
+    - lxde
+    - tigervnc-standalone-server
+    - x11-apps
+    - xorg
+    - xserver-xorg-video-all

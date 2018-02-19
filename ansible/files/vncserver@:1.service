@@ -1,0 +1,19 @@
+# FROM https://wiki.archlinux.org/index.php/TigerVNC#Starting_and_stopping_vncserver_via_systemd
+
+[Unit]
+Description=TigerVNC
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=admin
+PAMName=login
+
+# Clean any existing files in /tmp/.X11-unix environment
+ExecStartPre=/bin/sh -c '/usr/bin/vncserver -kill %i > /dev/null 2>&1 || :'
+ExecStart=/usr/bin/vncserver -geometry 1440x900 -fg -alwaysshared -dpi 100 -SecurityTypes None %i
+ExecStop=/usr/bin/vncserver -kill %i
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

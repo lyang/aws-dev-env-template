@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+  - include_tasks: tasks/local.yml
+
+- hosts: dev
+  tasks:
+  - include_tasks: tasks/base.yml
+  - include_tasks: tasks/vnc.yml

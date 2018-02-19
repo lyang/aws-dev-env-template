@@ -1,0 +1,6 @@
+Host dev
+  Hostname {{ hostvars.dev.ansible_host | mandatory }}
+  IdentityFile {{ hostvars.dev.ansible_ssh_private_key_file | mandatory | realpath }}
+  ForwardAgent yes
+  User {{ hostvars.dev.ansible_user | mandatory }}
+  LocalForward localhost:5901 localhost:5901

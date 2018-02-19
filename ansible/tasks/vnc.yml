@@ -1,0 +1,8 @@
+---
+- name: Setup TigerVNC service
+  copy: src=files/vncserver@:1.service dest=/etc/systemd/system/vncserver@:1.service
+  become: yes
+
+- name: Enable TigerVNC service
+  service: name=vncserver@:1.service enabled=yes state=started
+  become: yes
