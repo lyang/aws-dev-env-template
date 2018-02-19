@@ -23,10 +23,11 @@ data "aws_ami" "debian" {
   }
 }
 
-data "template_file" "dev-host" {
-  template = "${file("${path.module}/resources/dev-host")}"
+data "template_file" "dev-inventory" {
+  template = "${file("${path.module}/templates/dev-inventory")}"
 
   vars = {
-    host = "${aws_instance.dev.public_dns}"
+    host        = "${aws_instance.dev.public_dns}"
+    private-key = "${local_file.aws-dev-env-pem.filename}"
   }
 }
