@@ -14,6 +14,13 @@ resource "aws_instance" "dev" {
   key_name               = "${aws_key_pair.dev.key_name}"
   vpc_security_group_ids = ["${aws_security_group.ssh.id}", "${aws_security_group.internet.id}"]
 
+  ebs_block_device {
+    device_name = "/dev/xvdf"
+    snapshot_id = "${data.aws_ebs_snapshot.dev.id}"
+    volume_size = 10
+    volume_type = "gp2"
+  }
+
   tags {
     Name = "dev"
   }
