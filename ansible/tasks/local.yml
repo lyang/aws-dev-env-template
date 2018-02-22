@@ -4,4 +4,4 @@
     path: "~/.ssh/config"
     create: yes
     insertbefore: BOF
-    block: "{{ lookup('template', 'files/aws-dev-env-ssh-config') }}"
+    block: "{{ lookup('template', 'templates/ssh-config.j2') }}"
