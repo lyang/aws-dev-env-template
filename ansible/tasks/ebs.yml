@@ -1,0 +1,21 @@
+---
+- name: Format EBS volume
+  become: yes
+  filesystem:
+    dev: "{{ hostvars[inventory_hostname].ebs | mandatory }}"
+    fstype: ext4
+
+- name: Create mounting point
+  become: yes
+  file:
+    path: /ebs/home
+    state: directory
+    mode: 0755
+
+- name: Mount EBS home
+  become: yes
+  mount:
+    fstype: ext4
+    path: /ebs/home
+    src: "{{ hostvars[inventory_hostname].ebs | mandatory }}"
+    state: mounted

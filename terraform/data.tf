@@ -1,3 +1,5 @@
+data "aws_availability_zones" "available" {}
+
 data "aws_ami" "debian" {
   most_recent = true
   owners      = ["379101102735"]
@@ -27,16 +29,6 @@ data "aws_instance" "dev" {
   instance_id = "${aws_instance.dev.id}"
 }
 
-data "template_file" "dev-inventory" {
-  template = "${file("${path.module}/templates/dev-inventory")}"
-
-  vars = {
-    host        = "${aws_instance.dev.public_dns}"
-    private-key = "${local_file.aws-dev-env-pem.filename}"
-    ebs         = "${lookup(data.aws_instance.dev.ebs_block_device[0], "device_name")}"
-  }
-}
-
 data "aws_ebs_snapshot" "dev" {
   most_recent = true
   owners      = ["self"]
@@ -47,4 +39,38 @@ data "aws_ebs_snapshot" "dev" {
   }
 }
 
-data "aws_availability_zones" "available" {}
+data "template_file" "cloud-init" {
+  template = "${file("${path.module}/templates/cloud-init.yml.tpl")}"
+
+  vars = {
+    ec2-user = "${local.ec2-user}"
+  }
+}
+
+data "template_file" "inventory" {
+  template = "${file("${path.module}/templates/inventory/inventory.yml.tpl")}"
+
+  vars = {
+    host = "${aws_instance.dev.public_dns}"
+  }
+}
+
+data "template_file" "group-vars-pristine" {
+  template = "${file("${path.module}/templates/inventory/group_vars/pristine.yml.tpl")}"
+
+  vars = {
+    ec2-user-private-key = "${local_file.ec2-user-pem.filename}"
+    admin-public-key     = "${local_file.admin-pub.filename}"
+    device-name          = "${lookup(data.aws_instance.dev.ebs_block_device[0], "device_name")}"
+    ec2-user             = "${local.ec2-user}"
+    host                 = "${aws_instance.dev.public_dns}"
+  }
+}
+
+data "template_file" "group-vars-managed" {
+  template = "${file("${path.module}/templates/inventory/group_vars/managed.yml.tpl")}"
+
+  vars = {
+    admin-private-key = "${local_file.admin-pem.filename}"
+  }
+}
