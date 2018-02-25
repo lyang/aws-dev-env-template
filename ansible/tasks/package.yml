@@ -1,8 +1,12 @@
 ---
-- name: Install base packages
-  apt: name={{ item }} update_cache=yes state=latest
+- name: Install Packages
+  package:
+    name: "{{ item }}"
+    state: latest
   with_items:
+    - git
     - lxde
+    - tmux
     - tigervnc-standalone-server
     - x11-apps
     - xorg

@@ -1,10 +1,15 @@
 ---
+- name: Find ec2-user's groups
+  shell: id -Gn ec2-user | cut -d ' ' -f 2- | sed 's/ /,/g'
+  register: ec2_user_groups
+
 - name: Ensure admin user exists
   user:
     comment: Admin
     createhome: yes
     home: /ebs/home/admin
     name: admin
+    groups: "{{ ec2_user_groups.stdout }}"
     shell: /bin/bash
     state: present
 
