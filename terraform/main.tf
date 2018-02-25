@@ -3,9 +3,7 @@ provider "aws" {
 }
 
 terraform {
-  backend "s3" {
-    encrypt = true
-  }
+  backend "s3" {}
 }
 
 resource "aws_instance" "dev" {
