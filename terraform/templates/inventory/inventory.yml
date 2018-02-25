@@ -6,5 +6,4 @@ all:
         ${host}
     managed:
       hosts:
-        dev:
-          ansible_host: ${host}
+        dev

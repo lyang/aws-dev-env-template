@@ -54,7 +54,7 @@ data "aws_ebs_snapshot" "dev" {
 }
 
 data "template_file" "cloud-init" {
-  template = "${file("${path.module}/templates/cloud-init.yml.tpl")}"
+  template = "${file("${path.module}/templates/cloud-init.yml")}"
 
   vars = {
     ec2-user = "${local.ec2-user}"
@@ -62,7 +62,7 @@ data "template_file" "cloud-init" {
 }
 
 data "template_file" "inventory" {
-  template = "${file("${path.module}/templates/inventory/inventory.yml.tpl")}"
+  template = "${file("${path.module}/templates/inventory/inventory.yml")}"
 
   vars = {
     host = "${aws_instance.dev.public_dns}"
@@ -70,7 +70,7 @@ data "template_file" "inventory" {
 }
 
 data "template_file" "group-vars-pristine" {
-  template = "${file("${path.module}/templates/inventory/group_vars/pristine.yml.tpl")}"
+  template = "${file("${path.module}/templates/inventory/group_vars/pristine.yml")}"
 
   vars = {
     ec2-user-private-key = "${local_file.ec2-user-pem.filename}"
@@ -82,7 +82,7 @@ data "template_file" "group-vars-pristine" {
 }
 
 data "template_file" "group-vars-managed" {
-  template = "${file("${path.module}/templates/inventory/group_vars/managed.yml.tpl")}"
+  template = "${file("${path.module}/templates/inventory/group_vars/managed.yml")}"
 
   vars = {
     admin-private-key = "${local_file.admin-pem.filename}"
