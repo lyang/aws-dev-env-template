@@ -49,7 +49,7 @@ data "aws_ebs_snapshot" "dev" {
 
   filter {
     name   = "tag:Name"
-    values = ["${local.ebs-snapshot-tag}"]
+    values = ["${aws_ebs_snapshot.seed.tags["Name"]}"]
   }
 }
 
