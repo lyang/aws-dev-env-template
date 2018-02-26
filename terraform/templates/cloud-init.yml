@@ -5,3 +5,5 @@ system_info:
 
 package_update: true
 package_upgrade: true
+packages:
+  - python

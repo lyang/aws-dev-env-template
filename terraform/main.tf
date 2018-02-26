@@ -7,7 +7,7 @@ terraform {
 }
 
 resource "aws_instance" "dev" {
-  ami                    = "${data.aws_ami.debian.id}"
+  ami                    = "${local.ami-id}"
   instance_type          = "${var.instance-type}"
   key_name               = "${aws_key_pair.ec2-user.key_name}"
   vpc_security_group_ids = ["${aws_security_group.ssh.id}", "${aws_security_group.internet.id}"]
@@ -17,8 +17,8 @@ resource "aws_instance" "dev" {
   ebs_block_device {
     device_name = "/dev/xvdf"
     snapshot_id = "${data.aws_ebs_snapshot.dev.id}"
-    volume_size = 10
-    volume_type = "gp2"
+    volume_size = "${local.ebs-size}"
+    volume_type = "${var.ebs-type}"
   }
 
   tags {
