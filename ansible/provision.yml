@@ -1,6 +1,0 @@
----
-- hosts: managed
-  become: yes
-  tasks:
-  - include_tasks: tasks/package.yml
-  - include_tasks: tasks/vnc.yml
