@@ -21,3 +21,7 @@ variable "ebs-snapshot-schedule" {
 variable "ebs-snapshot-retention-days" {
   default = 30
 }
+
+variable "system-user" {
+  default = "ec2-user"
+}

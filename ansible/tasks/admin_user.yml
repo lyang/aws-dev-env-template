@@ -1,7 +1,7 @@
 ---
-- name: Find ec2-user's groups
-  shell: id -Gn ec2-user | cut -d ' ' -f 2- | sed 's/ /,/g'
-  register: ec2_user_groups
+- name: Find system-user's groups
+  shell: "id -Gn {{ hostvars[inventory_hostname].ansible_user }} | cut -d ' ' -f 2- | sed 's/ /,/g'"
+  register: system_user_groups
   changed_when: False
 
 - name: Ensure admin user exists
@@ -10,7 +10,7 @@
     createhome: yes
     home: /ebs/home/admin
     name: admin
-    groups: "{{ ec2_user_groups.stdout }}"
+    groups: "{{ system_user_groups.stdout }}"
     shell: /bin/bash
     state: present
 

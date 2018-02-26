@@ -1,4 +1,4 @@
-resource "tls_private_key" "ec2-user" {
+resource "tls_private_key" "system-user" {
   algorithm = "RSA"
   rsa_bits  = "2048"
 }
@@ -8,7 +8,7 @@ resource "tls_private_key" "admin" {
   rsa_bits  = "2048"
 }
 
-resource "aws_key_pair" "ec2-user" {
-  key_name   = "ec2-user-key-generated-by-terraform"
-  public_key = "${tls_private_key.ec2-user.public_key_openssh}"
+resource "aws_key_pair" "system-user" {
+  key_name   = "system-user-key-generated-by-terraform"
+  public_key = "${tls_private_key.system-user.public_key_openssh}"
 }

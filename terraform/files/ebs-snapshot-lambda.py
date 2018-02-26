@@ -11,8 +11,8 @@ ec2_resource = boto3.resource('ec2')
 
 
 def handle(event, context):
-    snapshot(event["volume_id"], event["ebs_snapshot_tag"])
-    cleanup(event["ebs_snapshot_retention"], event["ebs_snapshot_tag"])
+    snapshot(event["volume-id"], event["ebs-snapshot-tag"])
+    cleanup(event["ebs-snapshot-retention"], event["ebs-snapshot-tag"])
 
 
 def snapshot(volume_id, ebs_snapshot_tag):

@@ -57,7 +57,7 @@ data "template_file" "cloud-init" {
   template = "${file("${path.module}/templates/cloud-init.yml")}"
 
   vars = {
-    ec2-user = "${local.ec2-user}"
+    system-user = "${var.system-user}"
   }
 }
 
@@ -73,11 +73,11 @@ data "template_file" "group-vars-pristine" {
   template = "${file("${path.module}/templates/inventory/group_vars/pristine.yml")}"
 
   vars = {
-    ec2-user-private-key = "${local_file.ec2-user-pem.filename}"
-    admin-public-key     = "${local_file.admin-pub.filename}"
-    device-name          = "${local.ebs-device-name}"
-    ec2-user             = "${local.ec2-user}"
-    host                 = "${aws_instance.dev.public_dns}"
+    system-user-private-key = "${local_file.system-user-pem.filename}"
+    admin-public-key        = "${local_file.admin-pub.filename}"
+    device-name             = "${local.ebs-device-name}"
+    system-user             = "${var.system-user}"
+    host                    = "${aws_instance.dev.public_dns}"
   }
 }
 

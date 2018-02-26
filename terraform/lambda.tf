@@ -6,10 +6,4 @@ resource "aws_lambda_function" "ec2-snapshot" {
   runtime          = "python3.6"
   source_code_hash = "${data.archive_file.ec2-snapshot-lambda.output_base64sha256}"
   timeout          = 60
-
-  environment {
-    variables = {
-      EBS_SNAPSHOT_TAG = "${local.ebs-snapshot-tag}"
-    }
-  }
 }

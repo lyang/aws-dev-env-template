@@ -1,6 +1,6 @@
-resource "local_file" "ec2-user-pem" {
-  content  = "${tls_private_key.ec2-user.private_key_pem}"
-  filename = "${path.module}/../generated/ssh-keys/ec2-user.pem"
+resource "local_file" "system-user-pem" {
+  content  = "${tls_private_key.system-user.private_key_pem}"
+  filename = "${path.module}/../generated/ssh-keys/${var.system-user}.pem"
 
   provisioner "local-exec" {
     command = "chmod 0600 ${self.filename}"

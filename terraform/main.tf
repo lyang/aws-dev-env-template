@@ -9,7 +9,7 @@ terraform {
 resource "aws_instance" "dev" {
   ami                    = "${local.ami-id}"
   instance_type          = "${var.instance-type}"
-  key_name               = "${aws_key_pair.ec2-user.key_name}"
+  key_name               = "${aws_key_pair.system-user.key_name}"
   vpc_security_group_ids = ["${aws_security_group.ssh.id}", "${aws_security_group.internet.id}"]
 
   user_data = "${data.template_file.cloud-init.rendered}"
