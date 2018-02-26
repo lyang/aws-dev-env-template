@@ -1,7 +1,7 @@
 locals {
   ebs-device-name                  = "${lookup(data.aws_instance.dev.ebs_block_device[0], "device_name")}"
   ebs-snapshot-tag                 = "dev-ebs-snapshot"
-  ec2-snapshot-lambda-archive-path = "${path.module}/../generated/ebs-snapshot-lambda.js.zip"
+  ec2-snapshot-lambda-archive-path = "${path.module}/../generated/ebs-snapshot-lambda.py.zip"
   ec2-user                         = "ec2-user"
 
   ec2-snapshot-lambda-arguments = {

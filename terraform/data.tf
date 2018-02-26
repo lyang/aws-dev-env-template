@@ -86,6 +86,7 @@ data "template_file" "group-vars-managed" {
 
   vars = {
     admin-private-key = "${local_file.admin-pem.filename}"
+    host              = "${aws_instance.dev.public_dns}"
   }
 }
 

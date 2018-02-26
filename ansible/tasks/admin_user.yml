@@ -2,6 +2,7 @@
 - name: Find ec2-user's groups
   shell: id -Gn ec2-user | cut -d ' ' -f 2- | sed 's/ /,/g'
   register: ec2_user_groups
+  changed_when: False
 
 - name: Ensure admin user exists
   user:
