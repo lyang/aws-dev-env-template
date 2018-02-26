@@ -127,5 +127,5 @@ data "aws_iam_policy_document" "ec2-snapshot-policy-document" {
 data "archive_file" "ec2-snapshot-lambda" {
   type        = "zip"
   source_file = "${path.module}/files/ebs-snapshot-lambda.py"
-  output_path = "${local.ec2-snapshot-lambda-archive-path}"
+  output_path = "${substr("${path.module}/../generated/ebs-snapshot-lambda.py.zip", length(path.cwd)+1, -1)}"
 }
