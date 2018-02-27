@@ -10,4 +10,6 @@ locals {
     ebs-snapshot-tag       = "${local.ebs-snapshot-tag}"
     ebs-snapshot-retention = "${var.ebs-snapshot-retention-days}"
   }
+
+  ssh-key-dir = "${dirname(var.ssh-key-dir)}"
 }

@@ -5,6 +5,10 @@ resource "local_file" "system-user-pem" {
   provisioner "local-exec" {
     command = "chmod 0600 ${self.filename}"
   }
+
+  provisioner "local-exec" {
+    command = "mkdir -p ${local.ssh-key-dir} && cp ${self.filename} ${local.ssh-key-dir}"
+  }
 }
 
 resource "local_file" "primary-user-pem" {
@@ -16,13 +20,17 @@ resource "local_file" "primary-user-pem" {
   }
 
   provisioner "local-exec" {
-    command = "mkdir -p ${var.ssh-key-dir} && cp ${self.filename} ${var.ssh-key-dir}"
+    command = "mkdir -p ${local.ssh-key-dir} && cp ${self.filename} ${local.ssh-key-dir}"
   }
 }
 
 resource "local_file" "primary-user-public-key" {
   content  = "${tls_private_key.primary-user.public_key_openssh}"
   filename = "${substr("${path.module}/../generated/ssh-keys/${var.primary-user}.pub", length(path.cwd)+1, -1)}"
+
+  provisioner "local-exec" {
+    command = "mkdir -p ${local.ssh-key-dir} && cp ${self.filename} ${local.ssh-key-dir}"
+  }
 }
 
 resource "local_file" "inventory" {

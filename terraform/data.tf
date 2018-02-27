@@ -76,9 +76,10 @@ data "template_file" "group-vars-pristine" {
     device-name             = "${local.ebs-device-name}"
     host                    = "${aws_instance.dev.public_dns}"
     primary-user            = "${var.primary-user}"
-    primary-user-public-key = "${local_file.primary-user-public-key.filename}"
+    primary-user-public-key = "${basename(local_file.primary-user-public-key.filename)}"
     system-user             = "${var.system-user}"
-    system-user-private-key = "${local_file.system-user-pem.filename}"
+    system-user-private-key = "${basename(local_file.system-user-pem.filename)}"
+    ssh-key-dir             = "${local.ssh-key-dir}"
   }
 }
 
@@ -89,7 +90,7 @@ data "template_file" "group-vars-managed" {
     host                     = "${aws_instance.dev.public_dns}"
     primary-user             = "${var.primary-user}"
     primary-user-private-key = "${basename(local_file.primary-user-pem.filename)}"
-    ssh-key-dir              = "${dirname(var.ssh-key-dir)}"
+    ssh-key-dir              = "${local.ssh-key-dir}"
   }
 }
 
