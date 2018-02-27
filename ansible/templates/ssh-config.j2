@@ -1,8 +1,0 @@
-{% for host in groups['managed'] %}
-Host {{ host }} {{ hostvars[host]['ansible_host'] | mandatory }}
-  Hostname {{ hostvars[host]['ansible_host'] | mandatory }}
-  IdentityFile {{ hostvars[host]['ansible_ssh_private_key_file'] | mandatory | realpath }}
-  ForwardAgent yes
-  User {{ hostvars[host]['ansible_user'] | mandatory }}
-  LocalForward localhost:590{{loop.index}} localhost:590{{loop.index}}
-{% endfor %}

@@ -1,7 +1,0 @@
----
-- name: Insert ssh-config
-  blockinfile:
-    path: "~/.ssh/config"
-    create: yes
-    insertbefore: BOF
-    block: "{{ lookup('template', 'templates/ssh-config.j2') }}"

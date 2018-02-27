@@ -1,10 +1,4 @@
 ---
-- hosts: localhost
-  gather_facts: no
-  connection: local
-  tasks:
-  - include_tasks: tasks/local.yml
-
 - hosts: pristine
   gather_facts: no
   become: yes
