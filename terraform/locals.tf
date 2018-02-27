@@ -1,5 +1,5 @@
 locals {
-  ami-id                           = "${var.ami-id == "" ? data.aws_ami.debian.id : var.ami-id}"
+  ami-id                           = "${coalesce(var.ami-id, data.aws_ami.debian.id)}"
   ebs-size                         = "${max(data.aws_ebs_snapshot.dev.volume_size, var.ebs-size)}"
   ebs-device-name                  = "${lookup(data.aws_instance.dev.ebs_block_device[0], "device_name")}"
   ebs-snapshot-tag                 = "dev-ebs-snapshot"

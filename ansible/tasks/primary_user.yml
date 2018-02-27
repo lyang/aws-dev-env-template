@@ -1,0 +1,28 @@
+---
+- name: Find {{ ansible_user }}'s groups
+  shell: "id -Gn {{ ansible_user }} | cut -d ' ' -f 2- | sed 's/ /,/g'"
+  register: system_user_groups
+  changed_when: False
+
+- name: Ensure {{ primary_user }} user exists
+  user:
+    comment: "{{ primary_user | capitalize }}"
+    createhome: yes
+    home: /ebs/home/{{ primary_user }}
+    name: "{{ primary_user }}"
+    groups: "{{ system_user_groups.stdout }}"
+    shell: /bin/bash
+    state: present
+
+- name: Ensure the {{ primary_user }} user is passwordless sudoer
+  copy:
+    dest: /etc/sudoers.d/{{ primary_user }}-user
+    content: '{{ primary_user }} ALL=(ALL) NOPASSWD:ALL'
+    mode: 0440
+    validate: '/usr/sbin/visudo -cf %s'
+
+- name: Ensure the {{ primary_user }} user accepts the SSH key
+  authorized_key:
+    user: "{{ primary_user }}"
+    key: "{{ lookup('file', primary_user_public_key) }}"
+    state: present

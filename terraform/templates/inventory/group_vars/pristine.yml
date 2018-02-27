@@ -1,6 +1,7 @@
 ---
-ansible_user: ${system-user}
 ansible_connection: ssh
 ansible_ssh_private_key_file: ${system-user-private-key}
-admin_public_key: ${admin-public-key}
+ansible_user: ${system-user}
 ebs: ${device-name}
+primary_user_public_key: ${primary-user-public-key}
+primary_user: ${primary-user}

@@ -26,6 +26,10 @@ variable "system-user" {
   default = "ec2-user"
 }
 
+variable "primary-user" {
+  default = "admin"
+}
+
 variable "ssh-key-dir" {
   default = "~/.ssh/aws-dev-env/"
 }

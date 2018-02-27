@@ -1,7 +1,11 @@
 ---
 - hosts: pristine
+  vars:
+    ebs: "{{ hostvars[inventory_hostname].ebs | mandatory }}"
+    primary_user: "{{ hostvars[inventory_hostname].primary_user | mandatory }}"
+    primary_user_public_key: "{{ hostvars[inventory_hostname].primary_user_public_key | mandatory }}"
   gather_facts: no
   become: yes
   tasks:
     - import_tasks: tasks/ebs.yml
-    - import_tasks: tasks/admin_user.yml
+    - import_tasks: tasks/primary_user.yml

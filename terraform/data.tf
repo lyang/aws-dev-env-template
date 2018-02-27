@@ -70,14 +70,15 @@ data "template_file" "inventory" {
 }
 
 data "template_file" "group-vars-pristine" {
-  template = "${file("${path.module}/templates/inventory/group_vars/pristine.yml")}"
+  template   = "${file("${path.module}/templates/inventory/group_vars/pristine.yml")}"
 
   vars = {
-    system-user-private-key = "${local_file.system-user-pem.filename}"
-    admin-public-key        = "${local_file.admin-pub.filename}"
     device-name             = "${local.ebs-device-name}"
-    system-user             = "${var.system-user}"
     host                    = "${aws_instance.dev.public_dns}"
+    primary-user            = "${var.primary-user}"
+    primary-user-public-key = "${local_file.primary-user-public-key.filename}"
+    system-user             = "${var.system-user}"
+    system-user-private-key = "${local_file.system-user-pem.filename}"
   }
 }
 
@@ -85,9 +86,10 @@ data "template_file" "group-vars-managed" {
   template = "${file("${path.module}/templates/inventory/group_vars/managed.yml")}"
 
   vars = {
-    admin-private-key = "${basename(local_file.admin-pem.filename)}"
-    host              = "${aws_instance.dev.public_dns}"
-    ssh-key-dir       = "${dirname(var.ssh-key-dir)}"
+    host                     = "${aws_instance.dev.public_dns}"
+    primary-user             = "${var.primary-user}"
+    primary-user-private-key = "${basename(local_file.primary-user-pem.filename)}"
+    ssh-key-dir              = "${dirname(var.ssh-key-dir)}"
   }
 }
 

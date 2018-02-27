@@ -3,7 +3,7 @@ resource "tls_private_key" "system-user" {
   rsa_bits  = "2048"
 }
 
-resource "tls_private_key" "admin" {
+resource "tls_private_key" "primary-user" {
   algorithm = "RSA"
   rsa_bits  = "2048"
 }
