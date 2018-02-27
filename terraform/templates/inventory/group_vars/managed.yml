@@ -2,4 +2,4 @@
 ansible_user: admin
 ansible_connection: ssh
 ansible_host: ${host}
-ansible_ssh_private_key_file: ${admin-private-key}
+ansible_ssh_private_key_file: ${ssh-key-dir}/${admin-private-key}

@@ -25,3 +25,7 @@ variable "ebs-snapshot-retention-days" {
 variable "system-user" {
   default = "ec2-user"
 }
+
+variable "ssh-key-dir" {
+  default = "~/.ssh/aws-dev-env/"
+}

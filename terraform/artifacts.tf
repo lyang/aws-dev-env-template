@@ -14,6 +14,10 @@ resource "local_file" "admin-pem" {
   provisioner "local-exec" {
     command = "chmod 0600 ${self.filename}"
   }
+
+  provisioner "local-exec" {
+    command = "mkdir -p ${var.ssh-key-dir} && cp ${self.filename} ${var.ssh-key-dir}"
+  }
 }
 
 resource "local_file" "admin-pub" {

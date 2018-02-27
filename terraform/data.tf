@@ -85,8 +85,9 @@ data "template_file" "group-vars-managed" {
   template = "${file("${path.module}/templates/inventory/group_vars/managed.yml")}"
 
   vars = {
-    admin-private-key = "${local_file.admin-pem.filename}"
+    admin-private-key = "${basename(local_file.admin-pem.filename)}"
     host              = "${aws_instance.dev.public_dns}"
+    ssh-key-dir       = "${dirname(var.ssh-key-dir)}"
   }
 }
 
