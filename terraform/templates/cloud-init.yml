@@ -7,3 +7,4 @@ package_update: true
 package_upgrade: true
 packages:
   - python
+  - jq

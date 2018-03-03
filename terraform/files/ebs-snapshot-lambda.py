@@ -23,7 +23,7 @@ def snapshot(volume_id, ebs_snapshot_tag):
         )
 
         snapshot = ec2_resource.Snapshot(result['SnapshotId'])
-        snapshot.create_tags(Tags=[{'Key': 'Name', 'Value': ebs_snapshot_tag}])
+        snapshot.create_tags(Tags=[{'Key': 'Name', 'Value': ebs_snapshot_tag}, {'Key': 'Seed', 'Value': "False"}])
         logger.info("Snapshot created for %s", volume_id)
     except ClientError as e:
         logger.error(e)
@@ -34,7 +34,7 @@ def cleanup(retention, ebs_snapshot_tag):
     try:
         result = ec2_client.describe_snapshots(
             OwnerIds=["self"],
-            Filters=[{"Name": "tag:Name", "Values": [ebs_snapshot_tag]}]
+            Filters=[{"Name": "tag:Name", "Values": [ebs_snapshot_tag]}, {"Name": "tag:Seed", "Values": ["False"]}]
         )
         for snapshot in result['Snapshots']:
             if (now - snapshot["StartTime"]) > timedelta(int(retention)):

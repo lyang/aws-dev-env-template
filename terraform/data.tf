@@ -47,9 +47,25 @@ data "aws_ebs_snapshot" "dev" {
   most_recent = true
   owners      = ["self"]
 
+  snapshot_ids = ["${coalescelist(data.aws_ebs_snapshot_ids.dev.ids, list(aws_ebs_snapshot.seed.id))}"]
+
   filter {
     name   = "tag:Name"
-    values = ["${aws_ebs_snapshot.seed.tags["Name"]}"]
+    values = ["${local.ebs-snapshot-tag}"]
+  }
+}
+
+data "aws_ebs_snapshot_ids" "dev" {
+  owners = ["self"]
+
+  filter {
+    name   = "tag:Name"
+    values = ["${local.ebs-snapshot-tag}"]
+  }
+
+  filter {
+    name   = "tag:Seed"
+    values = ["False"]
   }
 }
 
@@ -119,6 +135,31 @@ data "aws_iam_policy_document" "ec2-snapshot-policy-document" {
       "ec2:CreateSnapshot",
       "ec2:CreateTags",
       "ec2:DeleteSnapshot",
+      "ec2:Describe*",
+      "ec2:ModifySnapshotAttribute",
+      "ec2:ResetSnapshotAttribute",
+    ]
+
+    resources = ["*"]
+  }
+}
+
+data "aws_iam_policy_document" "assume-ec2-role-policy-document" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "dev-policy-document" {
+  statement {
+    actions = [
+      "ec2:CreateSnapshot",
+      "ec2:CreateTags",
       "ec2:Describe*",
       "ec2:ModifySnapshotAttribute",
       "ec2:ResetSnapshotAttribute",
