@@ -17,7 +17,7 @@ resource "aws_instance" "dev" {
 
   ebs_block_device {
     device_name = "/dev/xvdf"
-    snapshot_id = "${data.aws_ebs_snapshot.dev.id}"
+    snapshot_id = "${data.aws_ebs_snapshot.latest.id}"
     volume_size = "${local.ebs-size}"
     volume_type = "${var.ebs-type}"
   }
@@ -45,7 +45,7 @@ resource "aws_instance" "dev" {
 
     inline = [
       "chmod +x /tmp/take-snapshot-before-destroy.sh",
-      "/tmp/take-snapshot-before-destroy.sh ${data.aws_ebs_snapshot.dev.id} ${local.ebs-snapshot-tag}",
+      "/tmp/take-snapshot-before-destroy.sh ${data.aws_ebs_snapshot.latest.id} ${local.ebs-snapshot-tag}",
     ]
   }
 }

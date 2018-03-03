@@ -29,7 +29,7 @@ data "aws_instance" "dev" {
   instance_id = "${aws_instance.dev.id}"
 }
 
-data "aws_ebs_volume" "ebs" {
+data "aws_ebs_volume" "current" {
   most_recent = true
 
   filter {
@@ -43,11 +43,11 @@ data "aws_ebs_volume" "ebs" {
   }
 }
 
-data "aws_ebs_snapshot" "dev" {
+data "aws_ebs_snapshot" "latest" {
   most_recent = true
   owners      = ["self"]
 
-  snapshot_ids = ["${coalescelist(data.aws_ebs_snapshot_ids.dev.ids, list(aws_ebs_snapshot.seed.id))}"]
+  snapshot_ids = ["${coalescelist(data.aws_ebs_snapshot_ids.backups.ids, list(aws_ebs_snapshot.seed.id))}"]
 
   filter {
     name   = "tag:Name"
@@ -55,7 +55,7 @@ data "aws_ebs_snapshot" "dev" {
   }
 }
 
-data "aws_ebs_snapshot_ids" "dev" {
+data "aws_ebs_snapshot_ids" "backups" {
   owners = ["self"]
 
   filter {
