@@ -70,7 +70,7 @@ data "template_file" "inventory" {
 }
 
 data "template_file" "group-vars-pristine" {
-  template   = "${file("${path.module}/templates/inventory/group_vars/pristine.yml")}"
+  template = "${file("${path.module}/templates/inventory/group_vars/pristine.yml")}"
 
   vars = {
     device-name             = "${local.ebs-device-name}"

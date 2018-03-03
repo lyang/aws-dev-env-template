@@ -39,11 +39,11 @@ resource "local_file" "inventory" {
 }
 
 resource "local_file" "group-vars-pristine" {
-  content    = "${data.template_file.group-vars-pristine.rendered}"
-  filename   = "${substr("${path.module}/../generated/inventory/group_vars/pristine.yml", length(path.cwd)+1, -1)}"
+  content  = "${data.template_file.group-vars-pristine.rendered}"
+  filename = "${substr("${path.module}/../generated/inventory/group_vars/pristine.yml", length(path.cwd)+1, -1)}"
 }
 
 resource "local_file" "group-vars-managed" {
-  content    = "${data.template_file.group-vars-managed.rendered}"
-  filename   = "${substr("${path.module}/../generated/inventory/group_vars/managed.yml", length(path.cwd)+1, -1)}"
+  content  = "${data.template_file.group-vars-managed.rendered}"
+  filename = "${substr("${path.module}/../generated/inventory/group_vars/managed.yml", length(path.cwd)+1, -1)}"
 }
