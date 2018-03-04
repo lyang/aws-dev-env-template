@@ -6,7 +6,7 @@ resource "aws_ebs_volume" "seed" {
 
   tags {
     Name = "${local.ebs-snapshot-tag}"
-    Seed = true
+    Seed = "True"
   }
 }
 

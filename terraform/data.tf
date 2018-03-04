@@ -77,39 +77,6 @@ data "template_file" "cloud-init" {
   }
 }
 
-data "template_file" "inventory" {
-  template = "${file("${path.module}/templates/inventory/inventory.yml")}"
-
-  vars = {
-    host = "${aws_instance.dev.public_dns}"
-  }
-}
-
-data "template_file" "group-vars-pristine" {
-  template = "${file("${path.module}/templates/inventory/group_vars/pristine.yml")}"
-
-  vars = {
-    device-name             = "${local.ebs-device-name}"
-    host                    = "${aws_instance.dev.public_dns}"
-    primary-user            = "${var.primary-user}"
-    primary-user-public-key = "${basename(local_file.primary-user-public-key.filename)}"
-    system-user             = "${var.system-user}"
-    system-user-private-key = "${basename(local_file.system-user-pem.filename)}"
-    ssh-key-dir             = "${local.ssh-key-dir}"
-  }
-}
-
-data "template_file" "group-vars-managed" {
-  template = "${file("${path.module}/templates/inventory/group_vars/managed.yml")}"
-
-  vars = {
-    host                     = "${aws_instance.dev.public_dns}"
-    primary-user             = "${var.primary-user}"
-    primary-user-private-key = "${basename(local_file.primary-user-pem.filename)}"
-    ssh-key-dir              = "${local.ssh-key-dir}"
-  }
-}
-
 data "aws_iam_policy_document" "assume-lambda-role-policy-document" {
   statement {
     actions = ["sts:AssumeRole"]

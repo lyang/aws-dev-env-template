@@ -25,27 +25,4 @@ resource "aws_instance" "dev" {
   tags {
     Name = "dev"
   }
-
-  connection {
-    host        = "${self.public_dns}"
-    type        = "ssh"
-    agent       = false
-    user        = "${var.system-user}"
-    private_key = "${tls_private_key.system-user.private_key_pem}"
-  }
-
-  provisioner "file" {
-    when        = "destroy"
-    source      = "${path.module}/files/take-snapshot-before-destroy.sh"
-    destination = "/tmp/take-snapshot-before-destroy.sh"
-  }
-
-  provisioner "remote-exec" {
-    when = "destroy"
-
-    inline = [
-      "chmod +x /tmp/take-snapshot-before-destroy.sh",
-      "/tmp/take-snapshot-before-destroy.sh ${data.aws_ebs_snapshot.latest.id} ${local.ebs-snapshot-tag}",
-    ]
-  }
 }

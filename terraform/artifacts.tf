@@ -33,17 +33,19 @@ resource "local_file" "primary-user-public-key" {
   }
 }
 
-resource "local_file" "inventory" {
-  content  = "${data.template_file.inventory.rendered}"
-  filename = "${substr("${path.module}/../generated/inventory/inventory.yml", length(path.cwd)+1, -1)}"
-}
+resource "template_dir" "inventory" {
+  source_dir      = "${path.module}/templates/inventory"
+  destination_dir = "${substr("${path.module}/../generated/inventory", length(path.cwd)+1, -1)}"
 
-resource "local_file" "group-vars-pristine" {
-  content  = "${data.template_file.group-vars-pristine.rendered}"
-  filename = "${substr("${path.module}/../generated/inventory/group_vars/pristine.yml", length(path.cwd)+1, -1)}"
-}
-
-resource "local_file" "group-vars-managed" {
-  content  = "${data.template_file.group-vars-managed.rendered}"
-  filename = "${substr("${path.module}/../generated/inventory/group_vars/managed.yml", length(path.cwd)+1, -1)}"
+  vars {
+    device-name              = "${local.ebs-device-name}"
+    ebs-snapshot-tag         = "${local.ebs-snapshot-tag}"
+    host                     = "${aws_instance.dev.public_dns}"
+    primary-user             = "${var.primary-user}"
+    primary-user-private-key = "${basename(local_file.primary-user-pem.filename)}"
+    primary-user-public-key  = "${basename(local_file.primary-user-public-key.filename)}"
+    system-user              = "${var.system-user}"
+    system-user-private-key  = "${basename(local_file.system-user-pem.filename)}"
+    ssh-key-dir              = "${local.ssh-key-dir}"
+  }
 }
