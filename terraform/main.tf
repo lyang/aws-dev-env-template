@@ -20,4 +20,23 @@ resource "aws_instance" "dev" {
   tags {
     ManagedBy = "${local.managed-by}"
   }
+
+  connection {
+    type        = "ssh"
+    host        = "${self.public_dns}"
+    user        = "${var.system-user}"
+    private_key = "${tls_private_key.system-user.private_key_pem}"
+  }
+
+  provisioner "file" {
+    content     = "${data.template_file.ebs-backup-script.rendered}"
+    destination = "${local.backup-script-path}"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod a+x ${local.backup-script-path}",
+      "sudo mv ${local.backup-script-path} /usr/local/bin/${basename(local.backup-script-path)}",
+    ]
+  }
 }

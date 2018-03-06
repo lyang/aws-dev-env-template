@@ -66,6 +66,14 @@ data "template_file" "cloud-init" {
   }
 }
 
+data "template_file" "ebs-backup-script" {
+  template = "${file("${path.module}/templates/backup-ebs-volume")}"
+
+  vars = {
+    managed-by = "${local.managed-by}"
+  }
+}
+
 data "aws_iam_policy_document" "assume-lambda-role-policy-document" {
   statement {
     actions = ["sts:AssumeRole"]

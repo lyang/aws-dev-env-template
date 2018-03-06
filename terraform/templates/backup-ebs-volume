@@ -1,0 +1,11 @@
+#! /bin/bash
+
+set -euxo pipefail
+
+BASELINE="$${1:-False}"
+REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
+INSTANCE_ID=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .instanceId)
+VOLUME_ID=$(aws ec2 describe-volumes --region $REGION --filters Name=attachment.instance-id,Values=$INSTANCE_ID Name=tag:ManagedBy,Values=${managed-by} | jq -r .Volumes[0].VolumeId)
+SNAPSHOT_ID=$(aws ec2 create-snapshot --region $REGION --volume-id $VOLUME_ID --description "Created by $0" | jq -r .SnapshotId)
+aws ec2 create-tags --region $REGION --resource $SNAPSHOT_ID --tags Key=ManagedBy,Value=${managed-by} Key=Baseline,Value=$BASELINE
+aws ec2 wait snapshot-completed --region $REGION --snapshot-ids $SNAPSHOT_ID

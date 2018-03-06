@@ -11,5 +11,7 @@ locals {
 
   managed-by = "${coalesce(var.managed-by, "Terraform")}"
 
+  backup-script-path = "/home/${var.system-user}/backup-ebs-volume"
+
   ssh-key-dir = "${dirname(var.ssh-key-dir)}"
 }
