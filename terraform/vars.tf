@@ -1,3 +1,15 @@
+variable "region" {
+  type = "string"
+}
+
+variable "availability-zone" {
+  type = "string"
+}
+
+variable "managed-by" {
+  default = ""
+}
+
 variable "ami-id" {
   default = ""
 }

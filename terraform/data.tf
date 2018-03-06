@@ -1,5 +1,3 @@
-data "aws_availability_zones" "available" {}
-
 data "aws_ami" "debian" {
   most_recent = true
   owners      = ["379101102735"]
@@ -25,21 +23,17 @@ data "aws_ami" "debian" {
   }
 }
 
-data "aws_instance" "dev" {
-  instance_id = "${aws_instance.dev.id}"
+data "external" "backend-config" {
+  program = ["${path.module}/files/get-backend-config.sh", "${path.module}/.terraform/terraform.tfstate"]
 }
 
-data "aws_ebs_volume" "current" {
-  most_recent = true
+data "terraform_remote_state" "self" {
+  backend = "s3"
 
-  filter {
-    name   = "attachment.instance-id"
-    values = ["${aws_instance.dev.id}"]
-  }
-
-  filter {
-    name   = "attachment.device"
-    values = ["${local.ebs-device-name}"]
+  config {
+    bucket = "${data.external.backend-config.result["bucket"]}"
+    key    = "${data.external.backend-config.result["key"]}"
+    region = "${data.external.backend-config.result["region"]}"
   }
 }
 
@@ -47,25 +41,20 @@ data "aws_ebs_snapshot" "latest" {
   most_recent = true
   owners      = ["self"]
 
-  snapshot_ids = ["${coalescelist(data.aws_ebs_snapshot_ids.backups.ids, list(aws_ebs_snapshot.seed.id))}"]
-
-  filter {
-    name   = "tag:Name"
-    values = ["${local.ebs-snapshot-tag}"]
-  }
+  snapshot_ids = ["${coalescelist(data.aws_ebs_snapshot_ids.baseline.ids, list(aws_ebs_snapshot.seed.id))}"]
 }
 
-data "aws_ebs_snapshot_ids" "backups" {
+data "aws_ebs_snapshot_ids" "baseline" {
   owners = ["self"]
 
   filter {
-    name   = "tag:Name"
-    values = ["${local.ebs-snapshot-tag}"]
+    name   = "tag:ManagedBy"
+    values = ["${local.managed-by}"]
   }
 
   filter {
-    name   = "tag:Seed"
-    values = ["False"]
+    name   = "tag:Baseline"
+    values = ["True"]
   }
 }
 

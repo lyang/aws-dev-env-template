@@ -38,8 +38,8 @@ resource "template_dir" "inventory" {
   destination_dir = "${substr("${path.module}/../generated/inventory", length(path.cwd)+1, -1)}"
 
   vars {
-    device-name              = "${local.ebs-device-name}"
-    ebs-snapshot-tag         = "${local.ebs-snapshot-tag}"
+    device-name              = "${aws_volume_attachment.current_attachment.device_name}"
+    managed-by               = "${local.managed-by}"
     host                     = "${aws_instance.dev.public_dns}"
     primary-user             = "${var.primary-user}"
     primary-user-private-key = "${basename(local_file.primary-user-pem.filename)}"

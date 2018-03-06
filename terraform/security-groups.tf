@@ -9,7 +9,7 @@ resource "aws_security_group" "ssh" {
   }
 
   tags {
-    Name = "ssh"
+    ManagedBy = "${local.managed-by}"
   }
 }
 
@@ -24,6 +24,6 @@ resource "aws_security_group" "internet" {
   }
 
   tags {
-    Name = "internet"
+    ManagedBy = "${local.managed-by}"
   }
 }

@@ -1,2 +1,2 @@
 ---
-snapshot_tag: ${ebs-snapshot-tag}
+managed_by: ${managed-by}
