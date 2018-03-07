@@ -5,7 +5,7 @@ A project template that helps creating simple \*nix development environment in A
 ## What does it do
 
 * Using [Terraform](https://www.terraform.io/) to create simple \*nix based EC2 development environment.
-* With automated EBS backup using CloudWatch and Lambda, it's very easy to destroy and recreate the dev environment.
+* With automated EBS backup using CloudWatch and Lambda, and a script on the instance to backup on demand, it's very easy to destroy and recreate the dev environment.
 * Using [Ansible](https://www.ansible.com/) to bootstrap the EC2 instance and generated inventory data, it's fairly easy to customize the instance to your need.
 
 For [example](https://github.com/lyang/my-aws-dev-env), I use the inventory data to
@@ -142,8 +142,8 @@ Only resources created by terraform will be destroyed, including local files.
 
 This terraform setup will take a snapshot of the EBS volume every Monday at 9AM GMT, if you left your instance running long enough or happen to create your instance shortly before the schedule, those EBS snapshots won't be cleaned up by `terraform destroy`, you would need to manually delete those if you don't want those sitting around.
 
-This is by design. Those EBS snapshots make it possible to throw away the instance without losing data[*], and being able to recreate the instance and start where you left. They also serve as point in time backups incase you lost data unexpectedly.
+This is by design. Those automated EBS snapshots make it possible to throw away the instance without losing data[*], and being able to recreate the instance and start where you left. They also serve as point in time backups incase you lost data unexpectedly.
 
-At anytime when you recreate your instance, it will try to use the last snapshot, or a fresh EBS volume if none were found.
+At anytime when you recreate your instance, it will try to use the last snapshot that was tagged `Baseline: True`, or a fresh EBS volume if none were found.
 
-*For now, you need to manually take a snapshot with a `Name` of [this tag value](https://github.com/lyang/aws-dev-env-template/blob/master/terraform/locals.tf#L5), if you have delta data after your last auto snapshot. I will find time to add built-in `snapshot-before-destroy` feature in the future.
+*If you have fresh data that wasn't included in the latest auto backup, you can run `backup-ebs-volume True` on your current instance to create a new baseline snapshot. Otherwise, set `Baseline` tag to `True` on your existing EBS snapshot to use it as your new starting point.
